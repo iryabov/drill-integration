@@ -5,16 +5,17 @@ import com.hierynomus.gradle.license.tasks.LicenseFormat
 
 plugins {
     `maven-publish`
-    `kotlin-dsl`
-    `java-gradle-plugin`
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     id("com.github.hierynomus.license")
 }
 
-group = "com.epam.drill.integration.gradle"
+group = "com.epam.drill.integration.github"
 version = rootProject.version
 
-val kotlinxSerializationVersion: String by parent!!.extra
-val kotlinxCoroutinesVersion: String by parent!!.extra
+val kotlinxSerializationVersion: String by extra
+val ktorVersion: String by parent!!.extra
+
 
 repositories {
     mavenLocal()
@@ -27,29 +28,31 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-gradlePlugin {
-    plugins {
-        create("drill-integration-gradle-plugin") {
-            id = "${group}.gradle-plugin"
-            implementationClass = "com.epam.drill.integration.gradle.DrillCiCdIntegrationGradlePlugin"
-        }
-    }
+dependencies {
+    compileOnly(kotlin("stdlib-jdk8"))
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation(project(":common"))
 }
 
-dependencies {
-    compileOnly(gradleApi())
-    compileOnly((kotlin("stdlib-jdk8")))
-    compileOnly((kotlin("gradle-plugin")))
-    implementation(project(":common"))
-    implementation(project(":gitlab"))
-    implementation(project(":github"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinxCoroutinesVersion")
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
+    }
+}
+
+publishing {
+    publications.create<MavenPublication>("jvm") {
+        from(components["java"])
     }
 }
 

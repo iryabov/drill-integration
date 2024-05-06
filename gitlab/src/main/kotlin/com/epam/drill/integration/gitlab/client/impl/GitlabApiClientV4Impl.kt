@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.epam.drill.integration.gitlab
+package com.epam.drill.integration.gitlab.client.impl
 
-import com.epam.drill.integration.common.DrillCIIntegration
+import com.epam.drill.integration.gitlab.client.GitlabApiClient
 import kotlinx.serialization.json.JsonObject
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -23,35 +23,24 @@ import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-open class DrillGitlabIntegration(
-    var gitlabUrl: String? = null,
-    var gitlabPrivateToken: String? = null,
-): DrillCIIntegration()
-
-object GitlabApiClient {
+class GitlabApiClientV4Impl(
+    private val gitlabApiUrl: String,
+    private val gitlabPrivateToken: String? = null
+) : GitlabApiClient {
     private val client = HttpClient(CIO) {
         install(JsonFeature)
     }
 
-    suspend fun postComment(payload: DrillGitlabIntegration, metrics: JsonObject) {
-        val coverage = metrics["coverage"]
-        val risks = metrics["risks"]
-        val url = "${payload.gitlabUrl}/api/v4/projects/${payload.projectId}/merge_requests/${payload.mergeRequestId}/notes"
-
+    override suspend fun postMergeRequestReport(projectId: String, mergeRequestId: String, comment: String) {
+        val url = "$gitlabApiUrl/v4/projects/$projectId/merge_requests/$mergeRequestId/notes"
         client.post<JsonObject>(url) {
             contentType(ContentType.Application.Json)
-            payload.gitlabPrivateToken?.let { token ->
+            gitlabPrivateToken?.let { token ->
                 headers {
                     append("Private-Token", token)
                 }
             }
-            body = mapOf(
-                "body" to """
-                Drill4J Results:
-                  Coverage: $coverage
-                  Risks: $risks
-            """.trimIndent()
-            )
+            body = mapOf("body" to comment)
         }
     }
 }

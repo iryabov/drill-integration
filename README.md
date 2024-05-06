@@ -1,22 +1,34 @@
-# Drill Integration Overview
+# Drill CI/CD Integration 
 
-Tools for integration with third-party systems such as CI/CD.
+## Overview
+
+Tools for integration with CI/CD systems such as Gitlab and GitHub.
 
 ## Modules
 
 - **common**: Common library
-- **gradle-plugin**: Gradle plugin
+- **gitlab**: Gitlab integration services
+- **github**: GitHub integration services
+- **gradle-plugin**: Gradle plugin for CI/CD integration
 
 ## Build
 
-Build common module:
+Build all modules:
+```shell
+gradle build
+```
+
+Publish common libraries
 ```shell
 cd common
-gradle build
+gradle publishToMavenLocal
+cd gitlab
+gradle publishToMavenLocal
+cd github
 gradle publishToMavenLocal
 ```
 
-Build gradle plugin:
+Build and publish Gradle plugin:
 ```shell
 cd ../gradle-plugin
 gradle build

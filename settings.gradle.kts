@@ -17,11 +17,9 @@ pluginManagement {
     }
 }
 
-include(":drill-common")
-include(":drill-gradle-plugin")
-//include(":drill-maven-plugin")
-//include(":drill-cli")
-project(":drill-common").projectDir = file("common")
-project(":drill-gradle-plugin").projectDir = file("gradle-plugin")
-//project(":drill-maven-plugin").projectDir = file("maven-plugin")
-//project(":drill-cli").projectDir = file("cli")
+include(":common")
+include(":gitlab")
+include(":github")
+include(":gradle-plugin")
+//include(":maven-plugin")
+//include(":cli")

@@ -13,21 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.epam.drill.integration.common
+package com.epam.drill.integration.gradle
 
 
-open class DrillCommonIntegration(
-    var drillUrl: String? = null,
+open class DrillProperties(
+    var drillApiUrl: String? = null,
     var drillApiKey: String? = null,
-    var groupId: String? = null,
-    var agentId: String? = null,
+    var drillGroupId: String? = null,
+    var drillAgentId: String? = null,
 )
 
-open class DrillCIIntegration(
+open class DrillCiCdProperties(
     var latestCommitSha: String? = null,
     var previousLatestCommitSha: String? = null,
+    var sourceBranch: String? = null,
+    var targetBranch: String? = null,
+    var gitlab: DrillGitlabProperties,
+    var github: DrillGithubProperties,
+): DrillProperties()
+
+class DrillGitlabProperties(
+    var gitlabApiUrl: String? = null,
+    var gitlabPrivateToken: String? = null,
     var projectId: String? = null,
     var mergeRequestId: String? = null,
-    var sourceBranch: String? = null,
-    var targetBranch: String? = null
-): DrillCommonIntegration()
+)
+
+class DrillGithubProperties(
+    var githubApiUrl: String? = null,
+    var githubToken: String? = null,
+    var githubRepository: String? = null,
+    var pullRequestId: Int? = null
+)
