@@ -45,7 +45,8 @@ class DrillCiCdIntegrationGradlePlugin : Plugin<Project> {
                         drillGroupId = ciCd.drillGroupId!!,
                         drillAgentId = ciCd.drillAgentId!!,
                         sourceBranch = ciCd.sourceBranch!!,
-                        targetBranch = ciCd.targetBranch!!)
+                        targetBranch = ciCd.targetBranch!!,
+                        latestCommitSha = ciCd.latestCommitSha!!)
                 }
             }
         }
@@ -64,7 +65,8 @@ class DrillCiCdIntegrationGradlePlugin : Plugin<Project> {
                         drillGroupId = ciCd.drillGroupId!!,
                         drillAgentId = ciCd.drillAgentId!!,
                         sourceBranch = ciCd.sourceBranch!!,
-                        targetBranch = ciCd.targetBranch!!)
+                        targetBranch = ciCd.targetBranch!!,
+                        latestCommitSha = ciCd.latestCommitSha!!)
                 }
             }
         }

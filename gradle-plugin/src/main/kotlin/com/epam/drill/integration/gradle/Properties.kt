@@ -25,7 +25,6 @@ open class DrillProperties(
 
 open class DrillCiCdProperties(
     var latestCommitSha: String? = null,
-    var previousLatestCommitSha: String? = null,
     var sourceBranch: String? = null,
     var targetBranch: String? = null,
     var gitlab: DrillGitlabProperties,

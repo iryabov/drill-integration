@@ -4,13 +4,12 @@ import com.hierynomus.gradle.license.tasks.LicenseCheck
 import com.hierynomus.gradle.license.tasks.LicenseFormat
 
 plugins {
-    `maven-publish`
-    `kotlin-dsl`
-    `java-gradle-plugin`
+    kotlin("jvm")
     id("com.github.hierynomus.license")
+    application
 }
 
-group = "com.epam.drill.integration.gradle"
+group = "com.epam.drill.integration.cli"
 version = rootProject.version
 
 val kotlinxCoroutinesVersion: String by parent!!.extra
@@ -26,19 +25,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-gradlePlugin {
-    plugins {
-        create("drill-integration-gradle-plugin") {
-            id = "${group}.gradle-plugin"
-            implementationClass = "com.epam.drill.integration.gradle.DrillCiCdIntegrationGradlePlugin"
-        }
-    }
-}
-
 dependencies {
-    compileOnly(gradleApi())
     compileOnly((kotlin("stdlib-jdk8")))
-    compileOnly((kotlin("gradle-plugin")))
+    implementation("com.github.ajalt.clikt:clikt:3.5.4")
     implementation(project(":common"))
     implementation(project(":gitlab"))
     implementation(project(":github"))
@@ -46,10 +35,31 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinxCoroutinesVersion")
 }
 
+val jarMainClassName = "com.epam.drill.integration.cli.CliAppKt"
+
+application {
+    mainClass.set(jarMainClassName)
+}
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
+}
+
 tasks {
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
     }
+    val runtimeJar by registering(Jar::class) {
+        group = "build"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        archiveBaseName.set("${project.name}-runtime")
+        manifest.attributes["Main-Class"] = jarMainClassName
+        from(
+            sourceSets.main.get().output,
+            configurations.runtimeClasspath.get().resolve().map(::zipTree)
+        )
+    }
+    assemble.get().dependsOn(runtimeJar)
 }
 
 @Suppress("UNUSED_VARIABLE")
