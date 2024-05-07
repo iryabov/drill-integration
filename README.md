@@ -10,6 +10,7 @@ Tools for integration with CI/CD systems such as Gitlab and GitHub.
 - **gitlab**: Gitlab integration services
 - **github**: GitHub integration services
 - **gradle-plugin**: Gradle plugin for CI/CD integration
+- **cli**: CLI Application for CI/CD integration
 
 ## Build
 
@@ -28,9 +29,8 @@ cd github
 gradle publishToMavenLocal
 ```
 
-Build and publish Gradle plugin:
+Publish Gradle plugin:
 ```shell
 cd ../gradle-plugin
-gradle build
 gradle publish
 ```

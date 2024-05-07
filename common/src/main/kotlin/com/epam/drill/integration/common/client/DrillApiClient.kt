@@ -29,6 +29,7 @@ interface DrillApiClient {
         groupId: String,
         agentId: String,
         sourceBranch: String,
-        targetBranch: String
+        targetBranch: String,
+        latestCommitSha: String
     ): JsonObject
 }

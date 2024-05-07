@@ -18,6 +18,11 @@ package com.epam.drill.integration.github.service
 import com.epam.drill.integration.common.client.DrillApiClient
 import com.epam.drill.integration.common.report.ReportGenerator
 import com.epam.drill.integration.github.client.GithubApiClient
+import com.epam.drill.integration.github.model.GithubEvent
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+import kotlinx.serialization.json.decodeFromStream
+import java.io.File
 
 class GithubCiCdService(
     private val githubApiClient: GithubApiClient,
@@ -37,7 +42,8 @@ class GithubCiCdService(
             drillGroupId,
             drillAgentId,
             sourceBranch,
-            targetBranch
+            targetBranch,
+            latestCommitSha
         )
         val comment = reportGenerator.getDiffSummaryReport(
             metrics
@@ -46,6 +52,27 @@ class GithubCiCdService(
             githubRepository,
             githubPullRequestId,
             comment
+        )
+    }
+
+    suspend fun postPullRequestReportByEvent(
+        githubEventFile: File,
+        drillGroupId: String,
+        drillAgentId: String
+    ) {
+        val json = Json {
+            ignoreUnknownKeys = true
+            namingStrategy = JsonNamingStrategy.SnakeCase
+        }
+        val event = json.decodeFromStream<GithubEvent>(githubEventFile.inputStream())
+        postPullRequestReport(
+            githubRepository = event.repository.fullName,
+            githubPullRequestId = event.pullRequest.number,
+            drillGroupId = drillGroupId,
+            drillAgentId = drillAgentId,
+            sourceBranch = event.pullRequest.head.ref,
+            targetBranch = event.pullRequest.base.ref,
+            latestCommitSha = event.pullRequest.head.sha,
         )
     }
 

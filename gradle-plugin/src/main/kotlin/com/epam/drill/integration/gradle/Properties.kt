@@ -39,7 +39,7 @@ class DrillGitlabProperties(
 )
 
 class DrillGithubProperties(
-    var githubApiUrl: String? = null,
+    var githubApiUrl: String = "https://api.github.com",
     var githubToken: String? = null,
     var githubRepository: String? = null,
     var pullRequestId: Int? = null

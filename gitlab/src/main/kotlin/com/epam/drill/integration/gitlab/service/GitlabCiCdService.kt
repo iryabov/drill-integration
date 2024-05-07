@@ -37,7 +37,8 @@ class GitlabCiCdService(
             drillGroupId,
             drillAgentId,
             sourceBranch,
-            targetBranch
+            targetBranch,
+            latestCommitSha
         )
         val comment = reportGenerator.getDiffSummaryReport(
             metrics
