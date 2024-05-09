@@ -22,7 +22,7 @@ interface DrillApiClient {
         groupId: String,
         agentId: String,
         sourceCommitSha: String,
-        targetCommitSha: String
+        baseCommitSha: String
     ): JsonObject
 
     suspend fun getDiffMetricsByBranches(

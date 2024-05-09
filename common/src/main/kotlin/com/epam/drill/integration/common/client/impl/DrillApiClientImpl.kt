@@ -35,26 +35,28 @@ class DrillApiClientImpl(
         groupId: String,
         agentId: String,
         sourceCommitSha: String,
-        targetCommitSha: String
+        baseCommitSha: String
     ): JsonObject {
         return getMetricsSummary(
             groupId = groupId,
             agentId = agentId,
             sourceCommitSha = sourceCommitSha,
-            targetCommitSha = targetCommitSha)
+            baseCommitSha = baseCommitSha)
     }
 
     override suspend fun getDiffMetricsByBranches(
         groupId: String,
         agentId: String,
         sourceBranch: String,
-        targetBranch: String
+        targetBranch: String,
+        latestCommitSha: String
     ): JsonObject {
         return getMetricsSummary(
             groupId = groupId,
             agentId = agentId,
             sourceBranch = sourceBranch,
-            targetBranch = targetBranch)
+            targetBranch = targetBranch,
+            sourceCommitSha = latestCommitSha)
     }
 
     private suspend fun getMetricsSummary(
@@ -62,7 +64,7 @@ class DrillApiClientImpl(
         agentId: String,
         sourceCommitSha: String? = null,
         sourceBranch: String? = null,
-        targetCommitSha: String? = null,
+        baseCommitSha: String? = null,
         targetBranch: String? = null
     ): JsonObject {
 
@@ -72,7 +74,7 @@ class DrillApiClientImpl(
             parameter("agentId", agentId)
             parameter("currentVcsRef", sourceCommitSha)
             parameter("currentBranch", sourceBranch)
-            parameter("baseVcsRef", targetCommitSha)
+            parameter("baseVcsRef", baseCommitSha)
             parameter("baseBranch", targetBranch)
 
             contentType(ContentType.Application.Json)

@@ -28,17 +28,17 @@ import com.github.ajalt.clikt.parameters.types.int
 import kotlinx.coroutines.runBlocking
 
 class GithubPullRequestReportCommand: CliktCommand(name = "githubPullRequestReport") {
-    private val drillApiUrl by option("-drill-u", "--drillApiUrl").required()
-    private val drillApiKey by option("-drill-k", "--drillApiKey")
-    private val drillGroupId by option("-g", "--drillGroupId").required()
-    private val drillAgentId by option("-a", "--drillAgentId").required()
-    private val sourceBranch by option("-sb", "--sourceBranch").required()
-    private val targetBranch by option("-tb", "--targetBranch").required()
-    private val latestCommitSha by option("-lc", "--latestCommitSha").required()
-    private val githubApiUrl by option("-gh-u", "--githubApiUrl").default("https://api.github.com")
-    private val githubToken by option("-gh-t", "--githubToken").required()
-    private val githubRepository by option("-r", "--githubRepository").required()
-    private val githubPullRequestNumber by option("-pr", "--githubPullRequestNumber").int().required()
+    private val drillApiUrl by option("-drill-u", "--drillApiUrl", envvar = "INPUT_DRILL_API_URL").required()
+    private val drillApiKey by option("-drill-k", "--drillApiKey", envvar = "INPUT_DRILL_API_KEY").required()
+    private val drillGroupId by option("-g", "--drillGroupId", envvar = "INPUT_GROUP_ID").required()
+    private val drillAgentId by option("-a", "--drillAgentId", envvar = "INPUT_AGENT_ID").required()
+    private val sourceBranch by option("-sb", "--sourceBranch", envvar = "INPUT_SOURCE_BRANCH").required()
+    private val targetBranch by option("-tb", "--targetBranch", envvar = "INPUT_TARGET_BRANCH").required()
+    private val latestCommitSha by option("-lc", "--latestCommitSha", envvar = "INPUT_CURRENT_VCS_REF").required()
+    private val githubApiUrl by option("-gh-u", "--githubApiUrl", envvar = "INPUT_GITHUB_API_URL").default("https://api.github.com")
+    private val githubToken by option("-gh-t", "--githubToken", envvar = "INPUT_GITHUB_TOKEN").required()
+    private val githubRepository by option("-r", "--githubRepository", envvar = "INPUT_REPOSITORY").required()
+    private val githubPullRequestNumber by option("-pr", "--githubPullRequestNumber", envvar = "INPUT_PULL_REQUEST_NUMBER").int().required()
 
     override fun run() {
         echo("Posting Drill4J Pull Request Report to GitHub...")

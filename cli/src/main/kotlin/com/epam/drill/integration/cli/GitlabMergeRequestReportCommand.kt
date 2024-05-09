@@ -26,17 +26,17 @@ import com.github.ajalt.clikt.parameters.options.required
 import kotlinx.coroutines.runBlocking
 
 class GitlabMergeRequestReportCommand : CliktCommand(name = "gitlabMergeRequestReport") {
-    private val drillApiUrl by option("-drill-u", "--drillApiUrl").required()
-    private val drillApiKey by option("-drill-k", "--drillApiKey")
-    private val drillGroupId by option("-g", "--drillGroupId").required()
-    private val drillAgentId by option("-a", "--drillAgentId").required()
-    private val sourceBranch by option("-sb", "--sourceBranch").required()
-    private val targetBranch by option("-tb", "--targetBranch").required()
-    private val latestCommitSha by option("-lc", "--latestCommitSha").required()
-    private val gitlabApiUrl by option("-gl-u", "--gitlabApiUrl").required()
-    private val gitlabPrivateToken by option("-gl-t", "--gitlabPrivateToken")
-    private val gitlabProjectId by option("-p", "--gitlabProjectId").required()
-    private val gitlabMergeRequestId by option("-mr", "--gitlabMergeRequestId").required()
+    private val drillApiUrl by option("-drill-u", "--drillApiUrl", envvar = "DRILL_API_URL").required()
+    private val drillApiKey by option("-drill-k", "--drillApiKey", envvar = "DRILL_API_KEY").required()
+    private val drillGroupId by option("-g", "--drillGroupId", envvar = "DRILL_GROUP_ID").required()
+    private val drillAgentId by option("-a", "--drillAgentId", envvar = "DRILL_AGENT_ID").required()
+    private val sourceBranch by option("-sb", "--sourceBranch", envvar = "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME").required()
+    private val targetBranch by option("-tb", "--targetBranch", envvar = "CI_MERGE_REQUEST_TARGET_BRANCH_NAME").required()
+    private val latestCommitSha by option("-lc", "--latestCommitSha", envvar = "CI_COMMIT_SHA").required()
+    private val gitlabApiUrl by option("-gl-u", "--gitlabApiUrl", envvar = "GITLAB_API_URL").required()
+    private val gitlabPrivateToken by option("-gl-t", "--gitlabPrivateToken", envvar = "GITLAB_PRIVATE_TOKEN").required()
+    private val gitlabProjectId by option("-p", "--gitlabProjectId", envvar = "CI_PROJECT_ID").required()
+    private val gitlabMergeRequestId by option("-mr", "--gitlabMergeRequestId", envvar = "CI_MERGE_REQUEST_IID").required()
 
     override fun run() {
         echo("Posting Drill4J Merge Request Report to Gitlab...")
