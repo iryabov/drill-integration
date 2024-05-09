@@ -20,42 +20,33 @@ import com.epam.drill.integration.common.report.impl.TextReportGenerator
 import com.epam.drill.integration.github.client.impl.GithubApiClientImpl
 import com.epam.drill.integration.github.service.GithubCiCdService
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
-import com.github.ajalt.clikt.parameters.types.int
 import kotlinx.coroutines.runBlocking
+import java.io.File
 
-class GithubPullRequestReportCommand: CliktCommand(name = "githubPullRequestReport") {
-    private val drillApiUrl by option("-drill-u", "--drillApiUrl", envvar = "INPUT_DRILL_API_URL").required()
+class GithubPullRequestReportByEventCommand: CliktCommand(name = "githubPullRequestReportByEvent") {
+    private val drillApiUrl by option("-drill-u", "--drillApiUrl", envvar = "GITHUB_API_URL").required()
     private val drillApiKey by option("-drill-k", "--drillApiKey", envvar = "INPUT_DRILL_API_KEY").required()
     private val drillGroupId by option("-g", "--drillGroupId", envvar = "INPUT_GROUP_ID").required()
     private val drillAgentId by option("-a", "--drillAgentId", envvar = "INPUT_AGENT_ID").required()
-    private val sourceBranch by option("-sb", "--sourceBranch", envvar = "GITHUB_HEAD_REF").required()
-    private val targetBranch by option("-tb", "--targetBranch", envvar = "GITHUB_BASE_REF").required()
-    private val latestCommitSha by option("-lc", "--latestCommitSha", envvar = "GITHUB_SHA").required()
     private val githubApiUrl by option("-gh-u", "--githubApiUrl", envvar = "GITHUB_API_URL").default("https://api.github.com")
     private val githubToken by option("-gh-t", "--githubToken", envvar = "INPUT_GITHUB_TOKEN").required()
-    private val githubRepository by option("-r", "--githubRepository", envvar = "GITHUB_REPOSITORY").required()
-    private val githubPullRequestNumber by option("-pr", "--githubPullRequestNumber", envvar = "INPUT_PULL_REQUEST_NUMBER").int().required()
+    private val eventFilePath by option("-ef", "--eventFilePath", envvar = "GITHUB_EVENT_PATH").required()
 
     override fun run() {
-        echo("Posting Drill4J Pull Request Report to GitHub...")
+        echo("Posting Drill4J Pull Request Report to GitHub by GitHub Event...")
         val githubCiCdService = GithubCiCdService(
             GithubApiClientImpl(githubApiUrl, githubToken),
             DrillApiClientImpl(drillApiUrl, drillApiKey),
             TextReportGenerator()
         )
         runBlocking {
-            githubCiCdService.postPullRequestReport(
-                githubRepository,
-                githubPullRequestNumber,
+            githubCiCdService.postPullRequestReportByEvent(
+                File(eventFilePath),
                 drillGroupId,
-                drillAgentId,
-                sourceBranch,
-                targetBranch,
-                latestCommitSha
+                drillAgentId
             )
         }
         echo("Done.")

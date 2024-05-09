@@ -13,11 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.epam.drill.integration.cli
+package com.epam.drill.coverage.maven
 
-class Config(
-    val drillApiUrl: String,
-    val drillApiKey: String?,
-    val drillGroupId: String,
-    val drillAgentId: String
-)
+import com.epam.drill.coverage.PluginLogger
+import org.slf4j.LoggerFactory
+
+class MavenLogger : PluginLogger {
+    private val logger = LoggerFactory.getLogger(javaClass)
+    override fun error(msg: String) {
+        logger.error(msg)
+    }
+
+    override fun warn(msg: String) {
+        logger.warn(msg)
+    }
+
+    override fun info(msg: String) {
+        logger.info(msg)
+    }
+
+    override fun debug(msg: String) {
+        logger.debug(msg)
+    }
+}
