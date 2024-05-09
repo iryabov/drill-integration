@@ -17,9 +17,9 @@ pluginManagement {
     }
 }
 
-include(":common")
-include(":gitlab")
-include(":github")
-include(":gradle-plugin")
-include(":cli")
+include(":drill-common")
+include(":drill-gitlab")
+include(":drill-github")
+include(":drill-gradle-plugin")
+include(":drill-cli")
 //include(":maven-plugin")

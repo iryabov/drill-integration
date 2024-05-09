@@ -10,7 +10,7 @@ plugins {
     id("com.github.hierynomus.license")
 }
 
-group = "com.epam.drill.integration.gradle"
+group = "com.epam.drill.integration"
 version = rootProject.version
 
 val kotlinxCoroutinesVersion: String by parent!!.extra
@@ -29,7 +29,7 @@ java {
 gradlePlugin {
     plugins {
         create("drill-integration-gradle-plugin") {
-            id = "${group}.gradle-plugin"
+            id = "${group}.drill-gradle-plugin"
             implementationClass = "com.epam.drill.integration.gradle.DrillCiCdIntegrationGradlePlugin"
         }
     }
@@ -39,9 +39,9 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly((kotlin("stdlib-jdk8")))
     compileOnly((kotlin("gradle-plugin")))
-    implementation(project(":common"))
-    implementation(project(":gitlab"))
-    implementation(project(":github"))
+    implementation(project(":drill-common"))
+    implementation(project(":drill-gitlab"))
+    implementation(project(":drill-github"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinxCoroutinesVersion")
 }

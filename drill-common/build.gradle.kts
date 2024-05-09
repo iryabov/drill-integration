@@ -10,7 +10,7 @@ plugins {
     id("com.github.hierynomus.license")
 }
 
-group = "com.epam.drill.integration.common"
+group = "com.epam.drill.integration"
 version = rootProject.version
 
 val kotlinxSerializationVersion: String by extra

@@ -9,7 +9,7 @@ plugins {
     application
 }
 
-group = "com.epam.drill.integration.cli"
+group = "com.epam.drill.integration"
 version = rootProject.version
 
 val kotlinxCoroutinesVersion: String by parent!!.extra
@@ -28,9 +28,9 @@ java {
 dependencies {
     compileOnly((kotlin("stdlib-jdk8")))
     implementation("com.github.ajalt.clikt:clikt:3.5.4")
-    implementation(project(":common"))
-    implementation(project(":gitlab"))
-    implementation(project(":github"))
+    implementation(project(":drill-common"))
+    implementation(project(":drill-gitlab"))
+    implementation(project(":drill-github"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinxCoroutinesVersion")
 }

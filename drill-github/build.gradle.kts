@@ -10,7 +10,7 @@ plugins {
     id("com.github.hierynomus.license")
 }
 
-group = "com.epam.drill.integration.github"
+group = "com.epam.drill.integration"
 version = rootProject.version
 
 val kotlinxSerializationVersion: String by extra
@@ -34,7 +34,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-    implementation(project(":common"))
+    implementation(project(":drill-common"))
 }
 
 kotlin.sourceSets.all {
